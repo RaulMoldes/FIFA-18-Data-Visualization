@@ -18,6 +18,14 @@ english_teams_B = ['Leicester City', 'Ipswich Town', 'Leeds United', 'Southampto
                    'Swansea City', 'Stoke City', 'Millwall', 'Huddersfield Town', 'Queens Park Rangers',
                    'Sheffield Wednesday', 'Rotherham United']
 
+italian_teams_A = ['Juventus', 'Napoli', 'Atalanta', 'Inter', 'Milan', 'Roma', 'Torino', 'Lazio',
+                   'Sampdoria', 'Bologna', 'Sassuolo', 'Udinese', 'SPAL', 'Parma', 'Cagliari', 'Fiorentina', 'Genoa',
+                   'Empoli', 'Frosinone', 'Chievo Verona']
+
+italian_teams_B = ['Ascoli', 'Benevento', 'Brescia', 'Carpi', 'Cittadella', 'Cremonese', 'Crotone', 'Foggia',
+                   'Hellas Verona', 'Lecce', 'Palermo', 'Perugia', 'Pescara', 'Salernitana',
+                   'Spezia', 'F.B.C. Unione Venezia']
+
 all_teams = ['Real Madrid CF', 'FC Barcelona', 'Paris Saint-Germain',
              'FC Bayern Munich', 'Manchester United', 'Chelsea', 'Juventus',
              'Manchester City', 'Arsenal', 'Atlético Madrid',
@@ -214,16 +222,59 @@ all_teams = ['Real Madrid CF', 'FC Barcelona', 'Paris Saint-Germain',
              'Halmstads BK', 'Shamrock Rovers', 'Derry City', 'Stevenage',
              'Finn Harps', 'FC Helsingør', 'Sligo Rovers', 'Bray Wanderers',
              'Limerick FC', 'Galway United', 'Drogheda United']
+
+from bs4 import BeautifulSoup
+
+
+def process_html(html):
+    # Crear un objeto BeautifulSoup
+    soup = BeautifulSoup(html, 'html.parser')
+
+    # Encontrar todas las filas de la tabla
+    filas = soup.find_all('tr')
+
+    # Lista para almacenar los datos de los equipos
+    equipos = []
+
+    # Iterar sobre cada fila
+    for fila in filas:
+        datos_equipo = []
+
+        # Encontrar todas las celdas en la fila
+        celdas = fila.find_all('td')
+
+        # Iterar sobre cada celda y obtener el texto
+        for celda in celdas:
+            datos_equipo.append(celda.get_text(strip=True))
+
+        # Añadir los datos del equipo a la lista de equipos
+        equipos.append(datos_equipo)
+
+    # Imprimir la lista de equipos
+    for equipo in equipos:
+        print(equipo[0])
+
+    # TODO: cambiar english_teams por el que se quiera matchear
+    for team in english_teams_B:
+        encontrado = False
+        for teamAux in all_teams:
+            if team.lower() in teamAux.lower():
+                encontrado = True
+                break
+        if not encontrado:
+            print(team)
+
+
 import os
-file_path = os.path.join(os.getcwd(),'data')
-file_complete = os.path.join(file_path,'CompleteDataset.csv')
+
+file_path = os.path.join(os.getcwd(), 'data')
+file_complete = os.path.join(file_path, 'CompleteDataset.csv')
 
 import pandas as pd
+
 # Lee el archivo CSV en un DataFrame de pandas
 df = pd.read_csv(file_complete)
 
 # Filtra el DataFrame para mantener solo las filas donde 'club' está en alguna de las listas
-df_filtrado = df[df['Club'].isin(spanish_teams_A + spanish_teams_A + english_teams_A + english_teams_B)]
-
-
-print('hola')
+df_filtrado = df[df['Club'].isin(
+    spanish_teams_A + spanish_teams_B + english_teams_A + english_teams_B + italian_teams_A + italian_teams_B)]
