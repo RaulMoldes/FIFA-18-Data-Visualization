@@ -100,7 +100,7 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       selectInput("attributes", "Select attributes to be displayed on the y axis", choices = stats, multiple = TRUE),
-      selectInput("positions", "Select player positions to be displayed", choices = unique(data$Position))
+      selectInput("positions", "Select player positions to be displayed", choices = unique(data$PreferredPositions), multiple =TRUE)
     ),
     mainPanel(
       plotlyOutput("StatsPlot") 
@@ -112,7 +112,7 @@ ui <- fluidPage(
       selectInput("variable", "Select a variable to analyze clusters", choices = c("Player value", "Player wage", "Club country", "Player category", "Player position"))
     ),
   mainPanel(
-#    plotlyOutput("ClustersPlot")
+    plotlyOutput("ClustersPlot")
   
 )
 
@@ -120,7 +120,7 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   filtered<-reactive({
-    data[data$Position == input$positions,]
+    data[data$PreferredPositions == input$positions,]
   })
   
   output$StatsPlot <- renderPlotly({
@@ -136,9 +136,10 @@ server <- function(input, output) {
    })
     
     stats_plot <- plot_ly(
+      
       type = 'parcoords',
       line = list(color = 'purple'),
-      dimensions = dimensions
+      dimensions = dimensions,
     )
     stats_plot
   })
