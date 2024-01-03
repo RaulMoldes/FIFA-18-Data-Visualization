@@ -1,11 +1,14 @@
-spanish_teams_A = ['FC Barcelona', 'Atlético Madrid', 'Real Madrid', 'Valencia', 'Getafe', 'Sevilla', 'RCD Espanyol',
-                   'Athletic Club de Bilbao', 'Real Sociedad', 'Real Betis', 'Deportivo Alavés', 'Eibar', 'CD Leganés',
-                   'Villarreal', 'Levante', 'Real Valladolid', 'Celta de Vigo', 'Girona', 'Huesca', 'Rayo Vallecano']
+spanish_teams_A = ['FC Barcelona', 'Atlético Madrid', 'Real Madrid CF', 'Valencia CF', 'Getafe CF', 'Sevilla FC',
+                   'RCD Espanyol',
+                   'Athletic Club de Bilbao', 'Real Sociedad', 'Real Betis Balompié', 'Deportivo Alavés', 'SD Eibar',
+                   'CD Leganés',
+                   'Villarreal CF', 'Levante UD', 'Real Valladolid', 'RC Celta de Vigo', 'Girona CF', 'SD Huesca',
+                   'Rayo Vallecano']
 
-spanish_teams_B = ['Osasuna', 'Granada', 'Málaga', 'Albacete', 'Deportivo de la Coruña', 'Cádiz',
-                   'Real Oviedo', 'Sporting de Gijón', 'Almería', 'UD Las Palmas',
-                   'Alcorcón', 'Real Zaragoza', 'Tenerife', 'Numancia', 'Lugo',
-                   'Gimnàstic de Tarragona', 'Córdoba', 'Reus Deportiu']
+spanish_teams_B = ['CA Osasuna', 'Granada CF', 'Málaga CF', 'Albacete Balompié', 'RC Deportivo de La Coruña',
+                   'Cádiz C.F.', 'Real Oviedo', 'Real Sporting de Gijón', 'UD Almería', 'UD Las Palmas',
+                   'AD Alcorcón', 'Real Zaragoza', 'CD Tenerife', 'CD Numancia', 'CD Lugo', 'Gimnàstic de Tarragona',
+                   'Córdoba CF', 'CF Reus Deportiu']
 
 english_teams_A = ['Manchester City', 'Liverpool', 'Chelsea', 'Tottenham Hotspur', 'Arsenal', 'Manchester United',
                    'Wolverhampton Wanderers', 'Everton', 'Leicester City', 'West Ham United', 'Watford',
@@ -19,12 +22,12 @@ english_teams_B = ['Leicester City', 'Ipswich Town', 'Leeds United', 'Southampto
                    'Sheffield Wednesday', 'Rotherham United']
 
 italian_teams_A = ['Juventus', 'Napoli', 'Atalanta', 'Inter', 'Milan', 'Roma', 'Torino', 'Lazio',
-                   'Sampdoria', 'Bologna', 'Sassuolo', 'Udinese', 'SPAL', 'Parma', 'Cagliari', 'Fiorentina', 'Genoa',
+                   'Sampdoria', 'Bologna', 'Sassuolo', 'Udinese', 'Ferrara (SPAL)', 'Parma', 'Cagliari', 'Fiorentina', 'Genoa',
                    'Empoli', 'Frosinone', 'Chievo Verona']
 
-italian_teams_B = ['Ascoli', 'Benevento', 'Brescia', 'Carpi', 'Cittadella', 'Cremonese', 'Crotone', 'Foggia',
+italian_teams_B = ['Ascoli', 'Benevento Calcio', 'Brescia', 'Carpi', 'Cittadella', 'Cremonese', 'Crotone', 'Foggia',
                    'Hellas Verona', 'Lecce', 'Palermo', 'Perugia', 'Pescara', 'Salernitana',
-                   'Spezia', 'F.B.C. Unione Venezia']
+                   'La Spezia', 'F.B.C. Unione Venezia']
 
 all_teams = ['Real Madrid CF', 'FC Barcelona', 'Paris Saint-Germain',
              'FC Bayern Munich', 'Manchester United', 'Chelsea', 'Juventus',

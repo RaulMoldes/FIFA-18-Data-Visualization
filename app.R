@@ -5,19 +5,18 @@ library(leaflet)
 library(RColorBrewer)
 library(colorBlindness)
 
-# Assuming your data is in a CSV file named 'PlayerAttributeData.csv'
-data <-read.csv('data/CompleteDatasetFilteredFinal.csv')
+data <-read.csv('data/CompleteDatasetReviewFinal.csv')
 data <- as.data.frame(data)
 stats <- c("Acceleration","Aggression","Agility","Balance","Ball.control","Composure","Crossing","Curve","Dribbling","Finishing","Free.kick.accuracy","GK.diving","GK.handling","GK.kicking","GK.positioning","GK.reflexes","Heading.accuracy","Interceptions","Jumping","Long.passing","Long.shots","Marking","Penalties","Positioning","Reactions","Short.passing","Shot.power","Sliding.tackle","Sprint.speed","Stamina","Standing.tackle","Strength","Vision","Volleys")
 
-spanish_teams_A = c('FC Barcelona', 'Atlético Madrid', 'Real Madrid', 'Valencia', 'Getafe', 'Sevilla', 'RCD Espanyol',
-                   'Athletic Club de Bilbao', 'Real Sociedad', 'Real Betis', 'Deportivo Alavés', 'Eibar', 'CD Leganés',
-                   'Villarreal', 'Levante', 'Real Valladolid', 'Celta de Vigo', 'Girona', 'Huesca', 'Rayo Vallecano')
+spanish_teams_A = c('FC Barcelona', 'Atlético Madrid', 'Real Madrid CF', 'Valencia CF', 'Getafe CF', 'Sevilla FC',
+                    'RCD Espanyol', 'Athletic Club de Bilbao', 'Real Sociedad', 'Real Betis Balompié', 'Deportivo Alavés', 'SD Eibar',
+                    'CD Leganés', 'Villarreal CF', 'Levante UD', 'Real Valladolid', 'RC Celta de Vigo', 'Girona CF', 'SD Huesca', 'Rayo Vallecano')
 
-spanish_teams_B = c('Osasuna', 'Granada', 'Málaga', 'Albacete', 'Deportivo de la Coruña', 'Cádiz',
-                   'Real Oviedo', 'Sporting de Gijón', 'Almería', 'UD Las Palmas',
-                   'Alcorcón', 'Real Zaragoza', 'Tenerife', 'Numancia', 'Lugo',
-                   'Gimnàstic de Tarragona', 'Córdoba', 'Reus Deportiu')
+spanish_teams_B = c('CA Osasuna', 'Granada CF', 'Málaga CF', 'Albacete Balompié', 'RC Deportivo de La Coruña',
+                    'Cádiz C.F.', 'Real Oviedo', 'Real Sporting de Gijón', 'UD Almería', 'UD Las Palmas',
+                    'AD Alcorcón', 'Real Zaragoza', 'CD Tenerife', 'CD Numancia', 'CD Lugo', 'Gimnàstic de Tarragona',
+                    'Córdoba CF', 'CF Reus Deportiu')
 
 english_teams_A = c('Manchester City', 'Liverpool', 'Chelsea', 'Tottenham Hotspur', 'Arsenal', 'Manchester United',
                    'Wolverhampton Wanderers', 'Everton', 'Leicester City', 'West Ham United', 'Watford',
@@ -25,18 +24,18 @@ english_teams_A = c('Manchester City', 'Liverpool', 'Chelsea', 'Tottenham Hotspu
                    'Brighton & Hove Albion', 'Cardiff City', 'Fulham', 'Huddersfield Town')
 
 english_teams_B = c('Leicester City', 'Ipswich Town', 'Leeds United', 'Southampton', 'West Bromwich Albion', 'Hull City',
-                   'Sunderland', 'Preston North End', 'Watford', 'Norwich City', 'Blackburn Rovers', 'Cardiff City',
-                   'Middlesbrough', 'Bristol City', 'Coventry City', 'Plymouth Argyle', 'Birmingham City',
-                   'Swansea City', 'Stoke City', 'Millwall', 'Huddersfield Town', 'Queens Park Rangers',
-                   'Sheffield Wednesday', 'Rotherham United')
+                    'Sunderland', 'Preston North End', 'Watford', 'Norwich City', 'Blackburn Rovers', 'Cardiff City',
+                    'Middlesbrough', 'Bristol City', 'Coventry City', 'Plymouth Argyle', 'Birmingham City',
+                    'Swansea City', 'Stoke City', 'Millwall', 'Huddersfield Town', 'Queens Park Rangers',
+                    'Sheffield Wednesday', 'Rotherham United')
 
 italian_teams_A = c('Juventus', 'Napoli', 'Atalanta', 'Inter', 'Milan', 'Roma', 'Torino', 'Lazio',
-                   'Sampdoria', 'Bologna', 'Sassuolo', 'Udinese', 'SPAL', 'Parma', 'Cagliari', 'Fiorentina', 'Genoa',
-                   'Empoli', 'Frosinone', 'Chievo Verona')
+                    'Sampdoria', 'Bologna', 'Sassuolo', 'Udinese', 'Ferrara (SPAL)', 'Parma', 'Cagliari', 'Fiorentina', 'Genoa',
+                    'Empoli', 'Frosinone', 'Chievo Verona')
 
-italian_teams_B = c('Ascoli', 'Benevento', 'Brescia', 'Carpi', 'Cittadella', 'Cremonese', 'Crotone', 'Foggia',
-                   'Hellas Verona', 'Lecce', 'Palermo', 'Perugia', 'Pescara', 'Salernitana',
-                   'Spezia', 'F.B.C. Unione Venezia')
+italian_teams_B = c('Ascoli', 'Benevento Calcio', 'Brescia', 'Carpi', 'Cittadella', 'Cremonese', 'Crotone', 'Foggia',
+                    'Hellas Verona', 'Lecce', 'Palermo', 'Perugia', 'Pescara', 'Salernitana',
+                    'La Spezia', 'F.B.C. Unione Venezia')
 
 # Define a mapping from detailed positions to broader categories
 position_mapping <- list(
@@ -79,7 +78,7 @@ find_category <- function(position) {
   return("Midfielder")  # Return NA if no match found
 }
 
-# Function to find the category for a given position
+# Function to find the division of a club
 find_division <- function(club) {
   for (div in names(division_mapping)) {
     if (club %in% division_mapping[[div]]) {
@@ -87,6 +86,18 @@ find_division <- function(club) {
     }
   }
   return(NA)  # Return NA if no match found
+}
+
+# Function to convert the value of a player in a number
+convert_value_to_numeric <- function(value_string) {
+  value_numeric <- as.numeric(gsub("€|M", "", value_string)) * 1000000
+  return(value_numeric)
+}
+
+# Function to convert the wage of a player in a number
+convert_wage_to_numeric <- function(wage_string) {
+  wage_numeric <- as.numeric(gsub("€|K", "", wage_string)) * 1000
+  return(wage_numeric)
 }
 
 
@@ -114,9 +125,22 @@ ui <- fluidPage(
   mainPanel(
     plotlyOutput("ClustersPlot")
   
-)
+  )
 
-))
+ ), titlePanel("Bubble Chart"),
+ sidebarLayout(
+   sidebarPanel(
+     # Menu to select nationalities, we only show 5
+     selectInput("nationalities", "Select nationalities:",
+                 choices = unique(data$Nationality),
+                 selected = c("Spain", "Argentina", "England", "Portugal", "Italy"),
+                 multiple = TRUE),
+   ),
+   mainPanel(
+     plotlyOutput("bubble_chart")
+   )
+ )
+)
 
 server <- function(input, output) {
   filtered<-reactive({
@@ -209,6 +233,33 @@ server <- function(input, output) {
     
     
     clusters_plot
+  })
+  
+  output$bubble_chart <- renderPlotly({
+    # Creamos el bubble chart con plotly
+    df <- data
+    # Filtramos el dataframe según las nacionalidades seleccionadas por el usuario
+    filtered_df <- df[df$Nationality %in% input$nationalities, ]
+    
+    # Convertimos la columna "Value" a formato numérico
+    filtered_df$Value <- sapply(filtered_df$Value, convert_value_to_numeric)
+    
+    # Convertimos la columna "Wage" a formato numérico
+    filtered_df$Wage <- sapply(filtered_df$Wage, convert_wage_to_numeric)
+    plot_ly(
+      data = filtered_df,
+      x = ~Overall,
+      y = ~Value,
+      size = ~Wage,
+      color = ~Nationality,
+      text = ~paste("<br>Name: ",Name, "<br>Wage: ", Wage),
+      mode = "markers"
+    ) %>%
+      layout(
+        xaxis = list(title = "Overall"),
+        yaxis = list(title = "Value"),
+        showlegend = TRUE
+      )
   })
 }
 
