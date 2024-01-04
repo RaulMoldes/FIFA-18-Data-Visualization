@@ -139,6 +139,26 @@ ui <- fluidPage(
    mainPanel(
      plotlyOutput("bubble_chart")
    )
+ ), titlePanel("Histogram"),
+ sidebarLayout(
+   sidebarPanel(
+     sliderInput(inputId = "age",
+                 label = "Choose an age range:",
+                 min = min(data$Age),
+                 max = max(data$Age),
+                 step = 1,
+                 value = c(20, 25)
+     ),
+     selectInput(inputId = "positions2",
+                 label = "Select player positions to be displayed",
+                 choices = unique(data$PreferredPositions),
+                 selected = unique(data$PreferredPositions),
+                 multiple =TRUE
+    )
+   ),
+   mainPanel(
+     plotlyOutput("histogram")
+   )
  )
 )
 
@@ -260,6 +280,19 @@ server <- function(input, output) {
         yaxis = list(title = "Value"),
         showlegend = TRUE
       )
+  })
+  
+  output$histogram <- renderPlotly({
+    filtered_df <- data %>% filter(Age >= input$age[1] & Age <= input$age[2])
+    filtered_df <- filtered_df[filtered_df$PreferredPositions %in% input$positions2, ]
+    plot_ly(
+      data = filtered_df,
+      x = ~Potential,
+      type = "histogram"
+      ) %>%
+      layout(title = "Histogram of Potential by Age",
+             xaxis = list(title = "Potential")
+     )
   })
 }
 
