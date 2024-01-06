@@ -284,15 +284,15 @@ output$StatsPlot <- renderPlotly({
   })
   
   output$bubble_chart <- renderPlotly({
-    # Creamos el bubble chart con plotly
     df <- data
-    # Filtramos el dataframe según las nacionalidades seleccionadas por el usuario
+
+    # Filtering from the user input
     filtered_df <- df[df$Nationality %in% input$nationalities, ]
     
-    # Convertimos la columna "Value" a formato numérico
+    # Convert value column to number
     filtered_df$Value <- sapply(filtered_df$Value, convert_value_to_numeric)
     
-    # Convertimos la columna "Wage" a formato numérico
+    # Convert wage column to number
     filtered_df$Wage <- sapply(filtered_df$Wage, convert_wage_to_numeric)
     plot_ly(
       data = filtered_df,
@@ -318,13 +318,10 @@ output$StatsPlot <- renderPlotly({
       x = ~Potential,
       type = "histogram"
       ) %>%
-      layout(title = "Histogram of Potential by Age",
-             xaxis = list(title = "Potential")
+      layout(xaxis = list(title = "Potential")
      )
   })
 }
 
 
-
 shinyApp(ui, server)
-
