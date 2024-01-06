@@ -290,8 +290,7 @@ server <- function(input, output) {
       x = ~Potential,
       type = "histogram"
       ) %>%
-      layout(title = "Histogram of Potential by Age",
-             xaxis = list(title = "Potential")
+      layout(xaxis = list(title = "Potential")
      )
   })
 }
