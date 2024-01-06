@@ -1,0 +1,10 @@
+name: shinyapp
+title:
+username: raulmoldes
+account: raulmoldes
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10875666
+bundleId: 8114744
+url: https://raulmoldes.shinyapps.io/shinyapp/
+version: 1
