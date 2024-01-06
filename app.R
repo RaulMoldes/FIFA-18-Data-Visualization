@@ -2,8 +2,7 @@ library(shiny)
 library(plotly)
 
 library(leaflet)
-library(RColorBrewer)
-library(colorBlindness)
+
 
 data <-read.csv('data/CompleteDatasetReviewFinal.csv')
 data <- as.data.frame(data)
@@ -55,8 +54,27 @@ division_mapping <-list(
   "First"= c(spanish_teams_A,english_teams_A,italian_teams_A),
   "Second" = c(italian_teams_B,spanish_teams_B,english_teams_B)
 )
+
+color_mapping <- list(
+  "ST"="blue",
+  "RW"="red",
+  "GK"="yellow",
+  "LW"="green",
+  "CDM"="orange",
+  "CB"="purple",
+  "RM"="pink",
+  "CM"="black",
+  "LM"="brown",
+  "LB"="magenta",
+  "CAM"="grey",
+  "RB"="darkgreen",
+  "RWB"="darkred",
+  "CF"="darkblue",
+  "LWB"="turquoise"
+)
 data$PreferredPositions <- lapply(data$PreferredPositions, function(x) strsplit(x, " ")[[1]])
 data$PreferredPositions <- sapply(data$PreferredPositions, function(x) x[[1]])
+data$color <- sapply(data$PreferredPositions, function(x) color_mapping[[x]])
 
 #Function to find the country where the player does play
 find_country <- function(club){
@@ -88,6 +106,7 @@ find_division <- function(club) {
   return(NA)  # Return NA if no match found
 }
 
+
 # Function to convert the value of a player in a number
 convert_value_to_numeric <- function(value_string) {
   value_numeric <- as.numeric(gsub("€|M", "", value_string)) * 1000000
@@ -110,8 +129,8 @@ ui <- fluidPage(
   titlePanel("Football Statistics Parallel Chart"),
   sidebarLayout(
     sidebarPanel(
-      selectInput("attributes", "Select attributes to be displayed on the y axis", choices = stats, multiple = TRUE),
-      selectInput("positions", "Select player positions to be displayed", choices = unique(data$PreferredPositions), multiple =TRUE)
+      selectInput("attributes", "Select attributes to be displayed on the y axis", choices = stats, selected = c("Acceleration","Aggression","Agility","Balance","Ball.control"),multiple = TRUE),
+      selectInput("positions", "Select player positions to be displayed", choices = unique(data$PreferredPositions), selected = c("RW","GK"), multiple =TRUE)
     ),
     mainPanel(
       plotlyOutput("StatsPlot") 
@@ -120,7 +139,7 @@ ui <- fluidPage(
   sidebarLayout(
   
     sidebarPanel(
-      selectInput("variable", "Select a variable to analyze clusters", choices = c("Player value", "Player wage", "Club country", "Player category", "Player position"))
+      selectInput("variable", "Select a variable to analyze clusters", choices = c("Player value", "Player wage", "Club country", "Player category", "Player position"), selected="Player position")
     ),
   mainPanel(
     plotlyOutput("ClustersPlot")
@@ -167,9 +186,10 @@ server <- function(input, output) {
     data[data$PreferredPositions == input$positions,]
   })
   
-  output$StatsPlot <- renderPlotly({
+output$StatsPlot <- renderPlotly({
     req(input$positions)
     req(input$attributes)  
+    
     data_filt <- filtered()
     
     attributes <- input$attributes
@@ -178,13 +198,21 @@ server <- function(input, output) {
    dimensions <- lapply(attributes, function(attr) {
       list(range = c(0,100), label = attr, values = data_filt[[attr]])
    })
+  
+   
+   # Use the new 'color' column in your plot
+   
+   stats_plot <- plot_ly(
+     
+     type = 'parcoords',
+     dimensions = dimensions,
     
-    stats_plot <- plot_ly(
-      
-      type = 'parcoords',
-      line = list(color = 'purple'),
-      dimensions = dimensions,
-    )
+    line = list(color = 'purple')
+    
+    
+   )
+   
+   
     stats_plot
   })
   
